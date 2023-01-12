@@ -24,8 +24,8 @@ class Address(db.Model):
     id = db.Column(db.Integer, primary_key = True)
     first_name = db.Column(db.String(30), nullable = False)
     last_name = db.Column(db.String(30), nullable = False)
-    phone_number = db.Column(db.Integer(15), unique=True)
-    address = db.Column(db.Text)
+    phone_number = db.Column(db.Integer, nullable = False, unique=True)
+    address = db.Column(db.Text, nullable = False)
     date_created = db.Column(db.DateTime, nullable = False, default=datetime.utcnow)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
