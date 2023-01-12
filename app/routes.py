@@ -1,6 +1,6 @@
 from app import app
 from flask import render_template, redirect, url_for, flash
-from app.forms import SignUpForm
+from app.forms import SignUpForm, AddressForm
 from app.models import User, Address
 
 
@@ -31,8 +31,12 @@ def signup():
             flash('A user with that email and/or username already exists.', 'danger')
             return redirect(url_for('signup'))
         # If check_user is empty, creater a new record in the user table
-        new_user = User(first_name=first_name, last_name=last_name,
-                        email=email, username=username, password=password)
+        new_user = User(
+            first_name=first_name,
+            last_name=last_name,
+            email=email,
+            username=username,
+            password=password)
         # Flash a success message
         flash(f'Thank you {first_name} {last_name} for signing up!', 'success')
         # redirect back to home
@@ -41,3 +45,38 @@ def signup():
     return render_template('signup.html', form=form)
 
 # create a route for address inputs to be stored in db model
+
+
+@app.route('/address', methods=["GET", "POST"])
+def address():
+    form = AddressForm()
+
+    if form.validate_on_submit:
+        # get data from form
+        first_name = form.first_name.data
+        last_name = form.last_name.data
+        phone_number = form.phone_number.data
+        address = form.address.data
+        print(first_name, last_name, phone_number, address)
+
+        check_phone_number = Address.query.filter(
+            (Address.phone_number == phone_number)
+        )
+
+        if check_phone_number:
+            flash('A contact with that phone number already exists.', 'danger')
+            return redirect(url_for('address'))
+
+        new_address = Address(
+            first_name=first_name,
+            last_name=last_name,
+            phone_number=phone_number,
+            address=address
+        )
+
+        flash(
+            f'Your new contact info for  {first_name} {last_name} has been added!', 'success')
+
+        return redirect(url_for('address'))
+
+        return render_template('address.html', form=form)
