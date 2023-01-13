@@ -19,3 +19,9 @@ class AddressForm(FlaskForm):
     phone_number = IntegerField('Phone Number', validators=[InputRequired()])
     address = TextAreaField('Address', validators=[InputRequired()])
     submit = SubmitField()
+
+#create a class for login
+class LoginForm(FlaskForm):
+    username = StringField('Username', validators=[InputRequired()])
+    password = PasswordField('Password', validators=[InputRequired()])
+    submit = SubmitField()

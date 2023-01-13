@@ -3,8 +3,11 @@
 {%block title%} Home {% endblock title%}
 
 {% block content %}
-
+    {% if current_user.is_authenticated %}
+    <h1 class="text-center"> Hello again, {{current_user.username}}! </h1>
+    <h4 class="text-center"> You are logged into your address book. </h4>
+    {% else %}
     <h1 class="text-center">Welcome to your personal address book!</h1>
     <h4 class="text-center">A digital place to store your family, friends and colleagues contact information.</h4>
-
+    {% endif %}
 {% endblock content %}
