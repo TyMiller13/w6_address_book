@@ -9,6 +9,10 @@ from app.models import User, Address
 def index():
     return render_template('index.html')
 
+@app.route('/contacts')
+def contacts():
+    address = Address.query.all()
+    return render_template('contacts.html', address=address)
 
 @app.route('/signup', methods=["GET", "POST"])
 def signup():

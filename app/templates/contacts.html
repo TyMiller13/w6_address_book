@@ -4,16 +4,16 @@
 
 {% block content %} 
 <h1 class="text-center"> Contact List </h1>
-    {% for contact in address %}
-    <div class="card" style="width: 18rem;">
-        <div class="card-header">
-            {{contact.first_name}} {{contact.last_name}}
+ {% for contact in address %}
+    <div class="card my-4 mx-auto" style="width: 30rem;">
+        <div class="card-header text-center">
+            <strong>{{ contact.first_name }} {{ contact.last_name }}</strong>
         </div>
         <ul class="list-group list-group-flush">
-            <li class="list-group-item">{{contact.address}}</li>
-            <li class="list-group-item">{{contact.phone_number}}</li>
-            <li class="list-group-item">{{ contact.date_created.strftime('%A, %B %d at %I:%M%p') }}</li>
+            <li class="list-group-item"><strong>Address:</strong> {{ contact.address }}</li>
+            <li class="list-group-item"><strong>Phone Number:</strong> {{ contact.phone_number }}</li>
+            <li class="list-group-item"> <cite> <strong>Date Added:</strong> {{ contact.date_created.strftime('%B %d %Y') }} </cite></li>
         </ul>
     </div>
-    {% endfor %}
+ {% endfor %}
 {% endblock content %}
