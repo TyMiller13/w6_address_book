@@ -25,6 +25,10 @@ class User(db.Model, UserMixin):
     def check_password(self, password_guess):
         return check_password_hash(self.password, password_guess)
 
+@login.user_loader
+def load_user(user_id):
+    return User.query.get(user_id)
+
 class Address(db.Model):
     id = db.Column(db.Integer, primary_key = True)
     first_name = db.Column(db.String(30), nullable = False)
@@ -42,6 +46,16 @@ class Address(db.Model):
     def __repr__(self):
         return f"<Address {self.id}| {self.first_name} {self.last_name} {self.phone_number} {self.address}>"
 
-@login.user_loader
-def load_user(user_id):
-    return User.query.get(user_id)
+    def update(self, **kwargs):
+    # for each keyvalue that comes in as a keyword
+        for key,value in kwargs.items():
+            # if the key is an acceptable
+            if key in {'first_name','last_name', 'phone_number', 'address'}:
+                #set that attribute on the instance e.g. post.title = 'Updated Title'
+                setattr(self,key,value)
+        # save the updates to the database
+        db.session.commit()
+
+    def delete(self):
+        db.session.delete(self)
+        db.session.commit()

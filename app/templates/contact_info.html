@@ -4,7 +4,7 @@
 
 {% block content %} 
 <h1 class="text-center"> Contact List </h1>
- {% for info in address %}
+ 
     <div class="card my-4 mx-auto" style="width: 30rem;">
         <div class="card-header text-center">
             <strong>{{ info.first_name }} {{ info.last_name }}</strong>
@@ -15,5 +15,5 @@
             <li class="list-group-item"> <cite> <strong>Date Added:</strong> {{ info.date_created.strftime('%B %d %Y') }} </cite></li>
         </ul>
     </div>
- {% endfor %}
+ 
 {% endblock content %}

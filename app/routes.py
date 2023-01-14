@@ -1,5 +1,5 @@
 from app import app
-from flask import render_template, redirect, url_for, flash
+from flask import render_template, redirect, url_for, flash, request
 from flask_login import login_user, logout_user, login_required, current_user
 from app.forms import SignUpForm, AddressForm, LoginForm
 from app.models import User, Address
@@ -9,10 +9,12 @@ from app.models import User, Address
 def index():
     return render_template('index.html')
 
+
 @app.route('/contacts')
 def contacts():
     address = Address.query.all()
     return render_template('contacts.html', address=address)
+
 
 @app.route('/signup', methods=["GET", "POST"])
 def signup():
@@ -53,6 +55,7 @@ def signup():
 
 
 @app.route('/address', methods=["GET", "POST"])
+@login_required
 def address():
     form = AddressForm()
 
@@ -64,16 +67,20 @@ def address():
         address = form.address.data
         print(first_name, last_name, phone_number, address)
 
-        check_phone_number = Address.query.filter((Address.phone_number == phone_number)).all()
+        check_phone_number = Address.query.filter(
+            (Address.phone_number == phone_number)).all()
 
         if check_phone_number:
             flash('A contact with that phone number already exists.', 'danger')
             return redirect(url_for('address'))
 
-        new_address = Address(first_name=first_name, last_name=last_name, phone_number=phone_number, address=address)
-        flash(f"Your new contact info for {first_name} {last_name} has been added!", "success")
+        new_address = Address(first_name=first_name, last_name=last_name,
+                              phone_number=phone_number, address=address)
+        flash(
+            f"Your new contact info for {first_name} {last_name} has been added!", "success")
         return redirect(url_for('address'))
-    return render_template('address.html', form=form)
+    return render_template('add_address.html', form=form)
+
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -96,8 +103,44 @@ def login():
             return redirect(url_for('login'))
     return render_template('login.html', form=form)
 
+
 @app.route('/logout')
 def logout():
     logout_user()
     flash(f"You have been logged out", "warning")
     return redirect(url_for('index'))
+
+
+@app.route('/contacts/<int:address_id>')
+def get_info(address_id):
+    info = Address.query.get(address_id)
+    if not info:
+        flash(f"A contact with id {address_id} does not exist", "danger")
+        return redirect(url_for('contacts'))
+    return render_template('contact_info.html', info=info)
+
+
+@app.route('/contacts/<int:address_id>/update', methods=["GET", "POST"])
+def update_contact(address_id):
+    info = Address.query.get(address_id)
+    if not info:
+        flash(f"A contact with id# {address_id} does not exist", "danger")
+        return redirect(url_for('index'))
+    form = AddressForm()
+    if form.validate_on_submit():
+        # get the form data
+        first_name = form.first_name.data
+        last_name = form.last_name.data
+        phone_number = form.phone_number.data
+        address = form.address.data
+        info.update(first_name=first_name, last_name=last_name,
+                    phone_number=phone_number, address=address)
+        flash(f"{info.first_name} {info.last_name} has been updated!", "success")
+        # not redirecting to correct spot
+        return redirect(url_for('get_info', info_id=info.id))
+    if request.method == 'GET':
+        form.first_name.data = info.first_name
+        form.last_name.data = info.last_name
+        form.phone_number.data = info.phone_number
+        form.address.data = info.address
+    return render_template('update_contact.html', info=info, form=form)
