@@ -3,22 +3,22 @@
 {% block title %} Contacts {% endblock title %} 
 
 {% block content %} 
-<h1 class="text-center"> Contact List </h1>
+<h1 class="text-center"> Contact </h1>
  
-    <div class="card my-4 mx-auto" style="width: 30rem;">
+    <div class="card my-4 mx-auto shadow-lg p-2  bg-body-tertiary rounded bg-dark-subtle" style="width: 30rem;">
         <div class="card-header text-center">
             <strong>{{ info.first_name }} {{ info.last_name }}</strong>
         </div>
-        <ul class="list-group list-group-flush">
-            <li class="list-group-item"><strong>Address:</strong> {{ info.address }}</li>
-            <li class="list-group-item"><strong>Phone Number:</strong> {{ info.phone_number }}</li>
-            <li class="list-group-item"> <cite> <strong>Date Added:</strong> {{ info.date_created.strftime('%B %d %Y') }} </cite></li>
+        <ul class="list-group list-group-flush shadow-lg rounded">
+            <li class="list-group-item bg-body-secondary"><strong>Address:</strong> {{ info.address }}</li>
+            <li class="list-group-item bg-body-secondary"><strong>Phone Number:</strong> {{ info.phone_number }}</li>
+            <li class="list-group-item bg-body-secondary"> <cite> <strong>Date Added:</strong> {{ info.date_created.strftime('%B %d %Y') }} </cite></li>
         </ul>
         <div class="card-footer text-center">
-            <a href="{{ url_for('update_contact', address_id=info.id) }}" class="btn btn-success">Edit Post</a>
+            <a href="{{ url_for('update_contact', address_id=info.id) }}" class="btn btn-success mx-5">Edit Post</a>
             
-            <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal">
-                Delete Post
+            <button type="button" class="btn btn-danger mx-5" data-bs-toggle="modal" data-bs-target="#deleteModal">
+                Delete Contact
             </button>
             <!-- Modal -->
             <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
@@ -31,9 +31,9 @@
                         <div class="modal-body">
                         Are you sure you want to delete {{ info.first_name }} {{ info.last_name }}? This action cannot be undone.
                         </div>
-                        <div class="modal-footer">
+                        <div class="modal-footer d-flex justify-content-between">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <a href="{{ url_for('delete_post', address_id=info.id) }}" class="btn btn-danger">Delete Post</a>
+                            <a href="{{ url_for('delete_post', address_id=info.id) }}" class="btn btn-danger">Delete Contact</a>
                         </div>
                     </div>
                 </div>
