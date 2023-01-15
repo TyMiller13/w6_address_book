@@ -9,11 +9,10 @@
         <div class="card-header text-center">
             <strong>{{ info.first_name }} {{ info.last_name }}</strong>
         </div>
-        <ul class="list-group list-group-flush">
-            <li class="list-group-item"><strong>Address:</strong> {{ info.address }}</li>
-            <li class="list-group-item"><strong>Phone Number:</strong> {{ info.phone_number }}</li>
-            <li class="list-group-item"> <cite> <strong>Date Added:</strong> {{ info.date_created.strftime('%B %d %Y') }} </cite></li>
-        </ul>
+        <div class="card-footer">
+            <a href="{{ url_for('get_info', address_id = info.id) }}" class="btn btn-primary mt-3">Contact Info</a>
+
+        </div>
     </div>
  {% endfor %}
 {% endblock content %}

@@ -50,7 +50,7 @@ class Address(db.Model):
     # for each keyvalue that comes in as a keyword
         for key,value in kwargs.items():
             # if the key is an acceptable
-            if key in {'first_name','last_name', 'phone_number', 'address'}:
+            if key in {'first_name', 'last_name', 'phone_number', 'address'}:
                 #set that attribute on the instance e.g. post.title = 'Updated Title'
                 setattr(self,key,value)
         # save the updates to the database

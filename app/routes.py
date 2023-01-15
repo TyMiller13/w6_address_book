@@ -111,16 +111,17 @@ def logout():
     return redirect(url_for('index'))
 
 
-@app.route('/contacts/<int:address_id>')
+@app.route('/contacts/<int:address_id>', methods=["GET", "POST"])
 def get_info(address_id):
     info = Address.query.get(address_id)
     if not info:
         flash(f"A contact with id {address_id} does not exist", "danger")
-        return redirect(url_for('contacts'))
+        return redirect(url_for('index'))
     return render_template('contact_info.html', info=info)
 
 
 @app.route('/contacts/<int:address_id>/update', methods=["GET", "POST"])
+@login_required
 def update_contact(address_id):
     info = Address.query.get(address_id)
     if not info:
@@ -137,10 +138,22 @@ def update_contact(address_id):
                     phone_number=phone_number, address=address)
         flash(f"{info.first_name} {info.last_name} has been updated!", "success")
         # not redirecting to correct spot
-        return redirect(url_for('get_info', info_id=info.id))
+        return redirect(url_for('get_info', address_id=address_id))
     if request.method == 'GET':
         form.first_name.data = info.first_name
         form.last_name.data = info.last_name
         form.phone_number.data = info.phone_number
         form.address.data = info.address
     return render_template('update_contact.html', info=info, form=form)
+
+
+@app.route('/contacts/<address_id>/delete')
+@login_required
+def delete_post(address_id):
+    contact = Address.query.get(address_id)
+    if not contact:
+        flash(f"A post with id {address_id} does not exist", "danger")
+        return redirect(url_for('index'))
+    contact.delete()
+    flash(f"{contact.first_name} {contact.last_name} has been deleted", "info")
+    return redirect(url_for('index'))
