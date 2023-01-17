@@ -11,6 +11,7 @@ def index():
 
 
 @app.route('/contacts')
+@login_required
 def contacts():
     address = Address.query.all()
     return render_template('contacts.html', address=address)
@@ -112,6 +113,7 @@ def logout():
 
 
 @app.route('/contacts/<int:address_id>', methods=["GET", "POST"])
+@login_required
 def get_info(address_id):
     info = Address.query.get(address_id)
     if not info:
